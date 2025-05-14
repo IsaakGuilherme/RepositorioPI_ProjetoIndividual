@@ -97,7 +97,7 @@ body {
 .sobre-introducao {
   background-color: #e5e5e5;
   display: flex;
-  margin-bottom: 2px solid #ffffff;
+  margin-bottom: 2px solid #000000;
 }
 
 .sobre-introducao .container {
@@ -157,28 +157,138 @@ body {
 /*Idolos*/
 .sobre-idolos {
   background-color: #e5e5e5;
-  display: flex;
+  padding: 40px 20px;
 }
 
 .sobre-idolos .container {
-  justify-content: center;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
 
 .titulo-idolos {
   text-align: center;
-  width: 100%;
-  font-size: 2em; 
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 
-.sobre-idolos .idol-texto p{
-  text-align: justify;
-  font-size: 1.4em;
+.introducao-idolos {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.introducao-idolos p {
+  font-size: 1.2em;
   line-height: 1.6;
-  color: #000000;
+  color: #333;
+}
+
+
+.revelacoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  width: 100%;
+  flex-direction: row-reverse;
+}
+
+.revel-texto {
+  flex: 1;
+  min-width: 280px;
+}
+
+.revel-texto p {
+  text-align: justify;
+  font-size: 1.2em;
+  line-height: 1.6;
+  color: #000;
   margin: 0;
-  padding: 0;
+}
+
+.carrosel-idolo {
+  flex: 1;
+  max-width: 600px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.carrosel {
+  display: flex;
+  width: 400%;
+  height: 100%;
+  transition: all 0.5s ease-in-out;
+}
+
+.carrosel input {
+  display: none;
+}
+
+.idolo {
+  width: 25%;
+  flex-shrink: 0;
+}
+
+.idolo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
+}
+
+.idolo img:hover {
+  transform: scale(1.03);
+}
+
+.nav-manual {
+  position: absolute;
+  width: 100%;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+}
+
+.manual-btn {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  margin: 0 8px;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: 0.3s ease;
+}
+
+.manual-btn:hover {
+  background-color: #fff;
+  transform: scale(1.2);
+}
+
+/* Transição por radio */
+#radio1:checked ~ .primeiro {
+  margin-left: 0;
+}
+#radio2:checked ~ .primeiro {
+  margin-left: -25%;
+}
+#radio3:checked ~ .primeiro {
+  margin-left: -50%;
+}
+#radio4:checked ~ .primeiro {
+  margin-left: -75%;
+}
+
+.texto-idolo {
+  display: none;
 }
 
 /* FOOTER */
