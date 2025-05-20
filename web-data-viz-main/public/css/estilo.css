@@ -368,9 +368,10 @@ body {
 
 .login {
   height: var(--tamanho-login);
-  background-image: url('../assets/imgs/113Santos.jpg');
+  background-image: url('../assets/imgs/santos-fundo\(login\).jpg');
   background-size: cover;
 }
+
 
 .login .container {
   justify-content: center;
@@ -379,8 +380,8 @@ body {
 }
 
 .card {
-  width: 50%;
-  background-color: #e5e5e5;
+  width: 40%;
+  background-color: rgb(229, 229, 229, 0.8);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -436,12 +437,12 @@ body {
 .botao {
   cursor: pointer;
   font-family: "Barlow", sans-serif;
-  border: 0;
-  border-radius: 5px;
+  border: 2px solid #32b9cd;
+  border-radius: 8px;
   font-weight: 600;
   font-size: 18px;
-  color: #fff;
-  background-color: #ED145B;
+  color: #000000;
+  background-color: #ffffff;
   width: 120px;
   height: 30px;
   align-self: center;
