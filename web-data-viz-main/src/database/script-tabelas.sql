@@ -73,3 +73,23 @@ email varchar(64) not null,
 senha varchar(20) not null,
 index ix_usuario (idusuario)
 );
+
+create table perguntaQuiz (
+idperguntaQuiz int primary key auto_increment,
+pergunta varchar(50) not null,
+alternativa_A varchar(50) not null,
+alternativa_B varchar(50) not null,
+alternativa_C varchar(50) not null,
+alternativa_D varchar(50) not null,
+index ix_pergunta (idperguntaQuiz)
+);
+
+create table respostaQuiz (
+idrespostaQuiz int primary key auto_increment,
+pergunta1 varchar(50) not null,
+pergunta2 varchar(50) not null,
+pergunta3 varchar(50) not null,
+pergunta4 varchar(50) not null,
+pergunta5 varchar(50) not null,
+index ix_resposta (idrespostaQuiz)
+);
