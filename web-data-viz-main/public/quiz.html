@@ -23,19 +23,20 @@
     <div class="container">
       <div class="quiz-box">
         <div class="quiz-pergunta">
-          <h2>Pergunta 1</h2>
-          <p>Em que ano o Santos Futebol Clube foi fundado?</p>
+          <h2>Pergunta <span id="spanNumeroDaQuestaoAtual"></span></h2>
+          <p><span id="spanQuestaoExibida"></span></p>
         </div>
         <div class="quiz-opcoes">
-          <button class="opcao">1900</button>
-          <button class="opcao">1912</button>
-          <button class="opcao">1920</button>
-          <button class="opcao">1935</button>
+          <button class="opcao" id="opcaoUm" value="alternativaA">1900</button>
+          <button class="opcao" id="opcaoDois" value="alternativaB">1912</button>
+          <button class="opcao" id="opcaoTres" value="alternativaC">1920</button>
+          <button class="opcao" id="opcaoQuatro" value="alternativaD">1935</button>
         </div>
         <div class="quiz-progresso">
-          <span>Pergunta 1 de 10</span>
+          <span>Pergunta <span id="spanNumeroDaQuestaoAtual"></span> de <span id="qtdQuestoes"></span></span>
         </div>
         <div class="quiz-controle">
+          <button id="btnSubmeter" class="btn-submeter">Responder</button>
           <button class="btn-proximo">Próxima</button>
         </div>
       </div>
@@ -44,3 +45,190 @@
 </body>
 
 </html>
+
+<script>
+  let listaDeQuestoes = []
+
+  // variáveis globais    
+  let numeroDaQuestaoAtual = 0
+  let quantidadeDeQuestoes = listaDeQuestoes.length
+  // let isUltima = numeroDaQuestaoAtual == quantidadeDeQuestoes-1 ? true : false
+
+  function buscar() {
+    // Pegar o caminho para o GET buscar
+    fetch("http://localhost:3000/quiz/buscar"{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(function (resposta) {
+        if (resposta.ok) {
+          // Confirma os recebimento dos dados
+          resposta.json().then(data => {
+            console.log(data)
+            console.log(JSON.stringify(data));
+
+            // Adiciona as questões recebidas ao vetor listaDeQuestoes
+            listaDeQuestoes = data;
+            quantidadeDeQuestoes = listaDeQuestoes.length
+            document.getElementById('qtdQuestoes').innerText = quantidadeDeQuestoes;
+            preencherHTMLComQuestaoAtual()
+
+            // Função do exemplo_Quiz
+            btnSubmeter.disabled = false;
+            btnProx.disabled = true;
+          })
+        } else {
+          console.log("Houve um erro ao tentar buscar as perguntas!");
+          resposta.text().then(texto => {
+            console.error(texto);
+          });
+        }
+      });
+    return false;
+  }
+
+  function iniciarQuiz() {
+    document.getElementById('btnIniciarQuiz').style.display = "none"
+
+    document.getElementById('qtdQuestoes').innerHTML = quantidadeDeQuestoes
+
+    buscar();
+    preencherHTMLcomQuestaoAtual(0);
+
+    btnSubmeter.disabled = false
+    btnProx.disabled = true
+  }
+
+  function preencherHTMLcomQuestaoAtual(index) {
+    habilitarAlternativas(true)
+    const questaoAtual = listaDeQuestoes[index]
+    numeroDaQuestaoAtual = index
+
+    console.log("questaoAtual")
+    console.log(questaoAtual)
+
+    document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = Number(index) + 1;
+    document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.enunciado;
+    document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alt_A;
+    document.getElementById("labelOpcaoDois").innerHTML = questaoAtual.alt_B;
+
+    const botoes = document.querySelectorAll(".opcao");
+    botoes[0].innerText = questaoAtual.alt_A;
+    botoes[1].innerText = questaoAtual.alt_B;
+    botoes[2].innerText = questaoAtual.alt_C || ''; // Evita erro caso undefined
+    botoes[3].innerText = questaoAtual.alt_D || '';
+
+  }
+
+  let respostasQuiz = [];
+  function submeter() {
+    const options = document.getElementsByName("option");
+    let respostaAtual = '';
+
+    let hasChecked = false;
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].checked) {
+        respostaAtual = options[i].value;
+        hasChecked = true;
+        break;
+      }
+    }
+
+    if (!hasChecked) {
+      alert("Por favor, selecione uma opção.");
+    } else {
+      respostasQuiz[numeroDaQuestaoAtual] = respostaAtual;
+      btnSubmeter.disabled = true;
+      btnProx.disabled = false;
+      habilitarAlternativas(false);
+    }
+  }
+
+
+  function habilitarAlternativas(trueOrFalse) {
+    let opcaoEscolhida = trueOrFalse ? false : true
+
+    primeiraOpcao.disabled = opcaoEscolhida
+    segundaOpcao.disabled = opcaoEscolhida
+    terceiraOpcao.disabled = opcaoEscolhida
+    quartaOpcao.disabled = opcaoEscolhida
+
+  }
+
+  function avancar() {
+    btnProx.disabled = true
+    btnSubmeter.disabled = false
+
+    desmarcarRadioButtons();
+    limparCoresBackgroundOpcoes();
+
+    if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+      numeroDaQuestaoAtual++;
+      preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+
+    } else {
+      finalizarJogo();
+    }
+  }
+
+  function tentarNovamente() {
+    // atualiza a página
+    window.location.reload()
+  }
+
+  function limparCoresBackgroundOpcoes() {
+    const options = document.getElementsByName("option");
+    options.forEach((option) => {
+      document.getElementById(option.labels[0].id).classList.remove("text-danger-with-bg")
+      document.getElementById(option.labels[0].id).classList.remove("text-success-with-bg")
+    })
+  }
+
+  function desmarcarRadioButtons() {
+    const options = document.getElementsByName("option");
+    for (let i = 0; i < options.length; i++) {
+      options[i].checked = false;
+    }
+  }
+
+  function finalizarJogo() {
+    salvar();
+
+    setTimeout(() => {
+      alert("Quiz finalizado! Suas respostas foram salvas.");
+      window.location.href = "index.html";
+    }, 1000);
+  }
+
+  // SCRIPT PARA SALVAR AS RESPOSTAS
+  function salvar() {
+    //Recupere o valor da nova input pelo nome do id
+    // Agora vá para o método fetch logo abaixo
+    const salvarDados = {};
+    for (let i = 0; i < respostasQuiz.length; i++) {
+      if (respostasQuiz[i]) {
+        salvarDados[`resposta${i + 1}`] = respostasQuiz[i];
+      }
+    }
+
+
+    // Enviando o valor da nova input
+    fetch("http://localhost:3333/respostas/salvar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(salvarDados),
+    })
+
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+      });
+    return false;
+  }
+</script>
