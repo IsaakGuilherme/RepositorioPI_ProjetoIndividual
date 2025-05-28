@@ -187,6 +187,7 @@ body {
 .revelacoes {
   display: flex;
   justify-content: center;
+  align-self: center;
   gap: 30px;
   flex-wrap: wrap;
   max-width: 1200px;
