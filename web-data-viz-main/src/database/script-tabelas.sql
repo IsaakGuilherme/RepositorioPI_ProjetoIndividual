@@ -75,21 +75,16 @@ index ix_usuario (idusuario)
 );
 
 create table perguntaQuiz (
-idperguntaQuiz int primary key auto_increment,
-pergunta varchar(50) not null,
-alternativa_A varchar(50) not null,
-alternativa_B varchar(50) not null,
-alternativa_C varchar(50) not null,
-alternativa_D varchar(50) not null,
-index ix_pergunta (idperguntaQuiz)
+  id SERIAL PRIMARY KEY,
+  texto TEXT NOT NULL,
+  tipo VARCHAR(50) DEFAULT 'unica',
+  ordem INT
 );
 
+
 create table respostaQuiz (
-idrespostaQuiz int primary key auto_increment,
-pergunta1 varchar(50) not null,
-pergunta2 varchar(50) not null,
-pergunta3 varchar(50) not null,
-pergunta4 varchar(50) not null,
-pergunta5 varchar(50) not null,
-index ix_resposta (idrespostaQuiz)
+  id SERIAL PRIMARY KEY,
+  id_pergunta INT NOT NULL REFERENCES perguntas(id) ON DELETE CASCADE,
+  texto TEXT NOT NULL,
+  ordem INT
 );
