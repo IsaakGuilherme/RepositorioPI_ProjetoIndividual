@@ -23,17 +23,17 @@ create table respostaQuiz (
   fkpergunta INT NOT NULL,
   textoResposta TEXT NOT NULL,
   ordem INT,
-  constraint fk_pergunta foreign key (fkpergunta) references perguntaQuiz(id)
+  constraint fk_pergunta foreign key (fkpergunta) references perguntaQuiz(idPerguntaQuiz)
 );
 
 create table respostaUsuario (
-  idRespostaUsuario int PRIMARY KEY auto_increment,
   fkusuario INT NOT NULL,
   fkpergunta INT NOT NULL,
   fkresposta INT NOT NULL,
+  constraint pk_respostaUsuario PRIMARY KEY (fkusuario, fkpergunta),
   constraint fk_usuario foreign key (fkusuario) references usuario(idusuario),
-  constraint fk_pergunta_quiz foreign key (fkpergunta) references perguntaQuiz(idPerguntaQuiz),
-  constraint fk_resposta_quiz foreign key (fkresposta) references respostaQuiz(idRespostaQuiz)
+  constraint fk_perguntaResposta foreign key (fkpergunta) references perguntaQuiz(idPerguntaQuiz),
+  constraint fk_resposta foreign key (fkresposta) references respostaQuiz(idRespostaQuiz)
 );
 
 -- Inserção das perguntas
