@@ -34,18 +34,19 @@
             <p id="perguntaDaQuestaoAtual"><span id="spanQuestaoExibida"></span></p>
           </div>
           <div class="quiz-opcoes">
-            <button class="opcao" id="opcaoUm" onclick="selecionarResposta('alternativaA')">1900</button>
-            <button class="opcao" id="opcaoDois" onclick="selecionarResposta('alternativaB')">1912</button>
-            <button class="opcao" id="opcaoTres" onclick="selecionarResposta('alternativaC')">1920</button>
-            <button class="opcao" id="opcaoQuatro" onclick="selecionarResposta('alternativaD')">1935</button>
+            <button class="opcao" id="alternativaA" onclick="selecionarResposta('alternativaA')">1900</button>
+            <button class="opcao" id="alternativaB" onclick="selecionarResposta('alternativaB')">1912</button>
+            <button class="opcao" id="alternativaC" onclick="selecionarResposta('alternativaC')">1920</button>
+            <button class="opcao" id="alternativaD" onclick="selecionarResposta('alternativaD')">1935</button>
+
 
           </div>
           <div class="quiz-progresso">
-            <span>Pergunta <span id="spanNumeroDaQuestaoAtual"></span> de <span id="qtdQuestoes"></span></span>
+            <span>Pergunta <span id="spanNumeroDaQuestaoAtual2"></span> de <span id="qtdQuestoes"></span></span>
           </div>
           <div class="quiz-controle">
             <button id="btnSubmeter" class="btn-submeter">Responder</button>
-            <button class="btn-proximo">Próxima</button>
+            <button class="btn-proximo" id="btn-proximo" onclick="avancar()">Próxima</button>
           </div>
         </div>
       </div>
@@ -129,11 +130,12 @@
     }
   ];
 
-
   // variáveis globais    
   let numeroDaQuestaoAtual = 0
   let quantidadeDeQuestoes = listaDeQuestoes.length
-  // let isUltima = numeroDaQuestaoAtual == quantidadeDeQuestoes-1 ? true : false
+
+  const btnSubmeter = document.getElementById('btnSubmeter');
+  const btnProx = document.getElementById('btn-proximo');
 
   function onloadEsconder() {
     document.getElementById('quiz-geral').style.display = "none";
@@ -148,8 +150,8 @@
 
     preencherHTMLcomQuestaoAtual(0);
 
-    btnSubmeter.disabled = false
-    btnProx.disabled = true
+    btnSubmeter.disabled = false;
+    btnProx.disabled = true;
   }
 
   function preencherHTMLcomQuestaoAtual(index) {
@@ -158,6 +160,7 @@
     numeroDaQuestaoAtual = index;
 
     document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = index + 1;
+    document.getElementById("spanNumeroDaQuestaoAtual2").innerHTML = index + 1;
     document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.pergunta;
 
     // Alteração para preencher corretamente as alternativas nos botões
@@ -170,29 +173,6 @@
 
 
   let respostasQuiz = [];
-  function submeter() {
-    const options = document.getElementsByName("option");
-    let respostaAtual = '';
-
-    let hasChecked = false;
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].checked) {
-        respostaAtual = options[i].value;
-        hasChecked = true;
-        break;
-      }
-    }
-
-    if (!hasChecked) {
-      alert("Por favor, selecione uma opção.");
-    } else {
-      respostasQuiz[numeroDaQuestaoAtual] = respostaAtual;
-      btnSubmeter.disabled = true;
-      btnProx.disabled = false;
-      habilitarAlternativas(false);
-    }
-  }
-
 
   function habilitarAlternativas(enable) {
     const botoes = document.querySelectorAll(".opcao");
@@ -207,17 +187,15 @@
     // Adiciona a classe para destacar a opção selecionada
     const botoes = document.querySelectorAll(".opcao");
     botoes.forEach(btn => {
-      btn.classList.remove("selecionado"); // Remove a classe de seleção de todos os botões
+      btn.classList.remove("selecionado"); // Remove a seleção anterior
     });
 
-    const opcaoSelecionada = document.querySelector(`#${alternativa}`);
-    opcaoSelecionada.classList.add("selecionado"); // Adiciona a classe 'selected' à opção escolhida
+    const opcaoSelecionada = document.getElementById(alternativa);
+    opcaoSelecionada.classList.add("selecionado"); // Adiciona a classe 'selecionado' à opção escolhida
 
-    // Habilita o botão "Próxima"
-    document.querySelector(".btn-proximo").disabled = false;
+    // Habilitar o botão "Próxima" apenas quando uma resposta for selecionada
+    btnProx.disabled = false; // Ativa o botão "Próxima"
   }
-
-
 
   function avancar() {
     document.querySelector(".btn-proximo").disabled = true;
@@ -228,7 +206,6 @@
     if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
       numeroDaQuestaoAtual++;
       preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
-
     } else {
       finalizarJogo();
     }
@@ -240,7 +217,6 @@
     btn.classList.remove("selecionado");
   });
 }
-
 
   function finalizarJogo() {
     salvar();
@@ -262,9 +238,8 @@
       }
     }
 
-
     // Enviando o valor da nova input
-    fetch("http://localhost:3333/respostas/salvar", {
+    fetch("/respostas/salvar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
