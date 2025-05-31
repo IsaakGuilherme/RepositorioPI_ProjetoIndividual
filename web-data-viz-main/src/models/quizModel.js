@@ -1,13 +1,65 @@
 var database = require("../database/config");
 
-function buscar() {
-console.log("ACESSEI O quizModel -> buscar()");
-  var instrucaoSql = `
-    SELECT * FROM PerguntaQuiz;
+async function buscarQuestoesComAlternativas() {
+  const instrucaoSql = `
+    SELECT 
+      pq.idPerguntaQuiz,
+      pq.textoPergunta,
+      rq.idRespostaQuiz,
+      rq.textoResposta,
+      rq.ordem
+    FROM perguntaQuiz pq
+    JOIN respostaQuiz rq ON pq.idPerguntaQuiz = rq.fkpergunta
+    ORDER BY pq.ordem, rq.ordem;
   `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql);
+  const resultados = await database.executar(instrucaoSql);
+
+  // Montar o vetor no formato esperado pelo front-end
+  const listaDeQuestoes = [];
+  let questaoAtual = null;
+  let idUltimaPergunta = null;
+
+  resultados.forEach(row => {
+    if (row.idPerguntaQuiz !== idUltimaPergunta) {
+      // Se mudou a pergunta, cria um novo objeto
+      questaoAtual = {
+        id: row.idPerguntaQuiz,
+        pergunta: row.textoPergunta,
+        alternativaA: "",
+        alternativaB: "",
+        alternativaC: "",
+        alternativaD: "",
+        idAlternativaA: null,
+        idAlternativaB: null,
+        idAlternativaC: null,
+        idAlternativaD: null
+      };
+      listaDeQuestoes.push(questaoAtual);
+      idUltimaPergunta = row.idPerguntaQuiz;
+    }
+    // Mapear alternativas conforme ordem
+    if (row.ordem === 1) {
+      questaoAtual.alternativaA = row.textoResposta;
+      questaoAtual.idAlternativaA = row.idRespostaQuiz;
+    }
+    if (row.ordem === 2) {
+      questaoAtual.alternativaB = row.textoResposta;
+      questaoAtual.idAlternativaB = row.idRespostaQuiz;
+    }
+    if (row.ordem === 3) {
+      questaoAtual.alternativaC = row.textoResposta;
+      questaoAtual.idAlternativaC = row.idRespostaQuiz;
+    }
+    if (row.ordem === 4) {
+      questaoAtual.alternativaD = row.textoResposta;
+      questaoAtual.idAlternativaD = row.idRespostaQuiz;
+    }
+  });
+
+  return listaDeQuestoes;
 }
+
 module.exports = {
-  buscar
+  buscarQuestoesComAlternativas,
+  // ...outras funções...
 };

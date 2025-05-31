@@ -1,7 +1,7 @@
 var quizModel = require("../models/quizModel");
 
 function buscar(req, res) {
-    quizModel.buscar()
+    quizModel.buscarQuestoesComAlternativas()
         .then(function (resultado) {
             if (resultado.length > 0) {
                 res.status(200).json(resultado);
