@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Santista</title>
+  <link rel="stylesheet" href="../css/quiz.css">
+  <link rel="icon" href="../assets/icon/Santos.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+</head>
+
+<body onload="onloadEsconder(), carregarQuestoes(), validarSessao()">
+  <div class="quiz-header">
+    <div class="container">
+      <h1 class="titulo">Quiz do Santos</h1>
+      <a href="index.html" class="btn-voltar">Voltar ao Início</a>
+    </div>
+  </div>
+
+  <section class="quiz-main">
+    <div class="container">
+      <div class="quiz-box">
+
+        <div class="quiz-iniciar" id="quiz-iniciar">
+          <h2>Pronto para iniciar o quiz?</h2>
+          <button onclick="iniciarQuiz()" id="btnIniciarQuiz">Indicar Quiz</button>
+        </div>
+
+        <div id="quiz-geral">
+          <div class="quiz-pergunta">
+            <h2>Pergunta <span id="spanNumeroDaQuestaoAtual"></span></h2>
+            <p id="perguntaDaQuestaoAtual"><span id="spanQuestaoExibida"></span></p>
+          </div>
+          <div class="quiz-opcoes">
+            <button class="opcao" id="alternativaA" onclick="selecionarResposta('alternativaA')">1900</button>
+            <button class="opcao" id="alternativaB" onclick="selecionarResposta('alternativaB')">1912</button>
+            <button class="opcao" id="alternativaC" onclick="selecionarResposta('alternativaC')">1920</button>
+            <button class="opcao" id="alternativaD" onclick="selecionarResposta('alternativaD')">1935</button>
+
+
+          </div>
+          <div class="quiz-progresso">
+            <span>Pergunta <span id="spanNumeroDaQuestaoAtual2"></span> de <span id="qtdQuestoes"></span></span>
+          </div>
+          <div class="quiz-controle">
+            <button id="btnSubmeter" class="btn-submeter">Responder</button>
+            <button class="btn-proximo" id="btn-proximo" onclick="avancar()">Próxima</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>
+
+<script>
+  let listaDeQuestoes = [];
+
+  // variáveis globais    
+  let numeroDaQuestaoAtual = 0
+  let quantidadeDeQuestoes = listaDeQuestoes.length
+
+  const btnSubmeter = document.getElementById('btnSubmeter');
+  const btnProx = document.getElementById('btn-proximo');
+
+  function onloadEsconder() {
+    document.getElementById('quiz-geral').style.display = "none";
+  }
+
+  function carregarQuestoes() {
+    fetch("/quiz/buscar")
+      .then(response => response.json())
+      .then(data => {
+        listaDeQuestoes = data;
+        quantidadeDeQuestoes = listaDeQuestoes.length;
+
+        if (quantidadeDeQuestoes > 0) {
+          document.getElementById('btnIniciarQuiz').style.display = "block";
+        } else {
+          alert("Nenhuma questão disponível para o quiz.");
+        }
+      })
+      .catch(error => {
+        console.error("Erro ao carregar as questões:", error);
+      });
+  }
+
+  function iniciarQuiz() {
+    document.getElementById('quiz-geral').style.display = "block";
+    document.getElementById('quiz-iniciar').style.display = "none";
+    document.getElementById('btnIniciarQuiz').style.display = "none";
+
+    document.getElementById('qtdQuestoes').innerHTML = quantidadeDeQuestoes
+
+    preencherHTMLcomQuestaoAtual(0);
+
+    btnSubmeter.disabled = false;
+    btnProx.disabled = true;
+  }
+
+  // Altere o formato de respostasQuiz para guardar o id da resposta
+  let respostasQuiz = [];
+
+  // Quando o usuário seleciona uma resposta, salve o id da alternativa
+  function selecionarResposta(alternativa) {
+    const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual];
+    // Descubra o id da resposta selecionada
+    let idResposta = null;
+    if (alternativa === 'alternativaA') idResposta = questaoAtual.idRespostaA;
+    if (alternativa === 'alternativaB') idResposta = questaoAtual.idRespostaB;
+    if (alternativa === 'alternativaC') idResposta = questaoAtual.idRespostaC;
+    if (alternativa === 'alternativaD') idResposta = questaoAtual.idRespostaD;
+
+    respostasQuiz[numeroDaQuestaoAtual] = {
+      idPergunta: questaoAtual.id,
+      idResposta: idResposta
+    };
+
+    // Adiciona a classe para destacar a opção selecionada
+    const botoes = document.querySelectorAll(".opcao");
+    botoes.forEach(btn => {
+      btn.classList.remove("selecionado"); // Remove a seleção anterior
+    });
+
+    const opcaoSelecionada = document.getElementById(alternativa);
+    opcaoSelecionada.classList.add("selecionado"); // Adiciona a classe 'selecionado' à opção escolhida
+
+    // Habilitar o botão "Próxima" apenas quando uma resposta for selecionada
+    btnProx.disabled = false; // Ativa o botão "Próxima"
+  }
+
+  function preencherHTMLcomQuestaoAtual(index) {
+    habilitarAlternativas(true);
+    const questaoAtual = listaDeQuestoes[index];
+    numeroDaQuestaoAtual = index;
+
+    document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = index + 1;
+    document.getElementById("spanNumeroDaQuestaoAtual2").innerHTML = index + 1;
+    document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.pergunta;
+
+    // Preencha os textos e salve os ids das alternativas
+    const botoes = document.querySelectorAll(".opcao");
+    botoes[0].innerText = questaoAtual.alternativaA;
+    botoes[1].innerText = questaoAtual.alternativaB;
+    botoes[2].innerText = questaoAtual.alternativaC || '';
+    botoes[3].innerText = questaoAtual.alternativaD || '';
+
+    // Salve os ids das alternativas para uso posterior
+    questaoAtual.idRespostaA = questaoAtual.idAlternativaA;
+    questaoAtual.idRespostaB = questaoAtual.idAlternativaB;
+    questaoAtual.idRespostaC = questaoAtual.idAlternativaC;
+    questaoAtual.idRespostaD = questaoAtual.idAlternativaD;
+  }
+
+  function habilitarAlternativas(enable) {
+    const botoes = document.querySelectorAll(".opcao");
+    botoes.forEach(btn => {
+      btn.disabled = !enable;
+    });
+  }
+
+  function avancar() {
+    document.querySelector(".btn-proximo").disabled = true;
+    document.querySelector(".btn-submeter").disabled = false;
+
+    limparCoresBackgroundOpcoes();
+
+    if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+      numeroDaQuestaoAtual++;
+      preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+    } else {
+      finalizarJogo();
+    }
+  }
+
+  function limparCoresBackgroundOpcoes() {
+  const botoes = document.querySelectorAll(".opcao");
+  botoes.forEach(btn => {
+    btn.classList.remove("selecionado");
+  });
+}
+
+  function finalizarJogo() {
+    salvar();
+
+    setTimeout(() => {
+      alert("Quiz finalizado! Suas respostas foram salvas.");
+      window.location.href = "dashboard.html";
+    }, 1000);
+  }
+
+  // SCRIPT PARA SALVAR AS RESPOSTAS
+  function salvar() {
+    // Pegue o id do usuário de onde você estiver armazenando (exemplo: sessionStorage)
+    const idUsuario = sessionStorage.ID_USUARIO;
+
+    fetch("/respostas/salvarRespostas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idUsuario: idUsuario,
+        respostas: respostasQuiz
+      }),
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+      });
+    return false;
+  }
+</script>
