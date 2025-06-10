@@ -19,7 +19,8 @@
   <!--header inicio-->
   <div class="header">
     <div class="container">
-      <h1 class="titulo">Orgulho Santista</h1>
+      <h1 class="titulo">Santos</h1>
+      <img class="logo-header" src="assets/icon/Santos.ico" alt="Emblema do Santos Futebol Clube">
       <ul class="navbar">
         <li>
           <a href="index.html">Inicial</a>
@@ -80,23 +81,27 @@
     </div>
   </div>
 
-  <!--footer inicio-->
   <div class="footer">
     <div class="container">
-      <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023</h4>
-      <span class="version">v1.0.0</span>
+      <div class="footer-logo">
+        <img src="assets/icon/Santos.ico" alt="Logo Santos">
+        <span>Orgulho Santista</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="cadastro.html">Cadastro</a>
+        <a href="sobremim.html">Sobre Mim</a>
+      </div>
+      <div class="footer-copy">
+        &copy; 2025 Santos FC. Todos os direitos reservados.
+      </div>
     </div>
   </div>
-  <!--footer fim-->
 </body>
 
 </html>
 
 <script>
-
-  // Array para armazenar empresas cadastradas para validação de código de ativação 
-  let listaEmpresasCadastradas = [];
-
   function cadastrar() {
     // aguardar();
 
@@ -123,19 +128,6 @@
       setInterval(sumirMensagem, 5000);
     }
 
-    // Verificando se o código de ativação é de alguma empresa cadastrada
-    // for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
-    //   if (listaEmpresasCadastradas[i].codigo_ativacao == codigoVar) {
-    //     idEmpresaVincular = listaEmpresasCadastradas[i].id
-    //     console.log("Código de ativação válido.");
-    //     break;
-    //   } else {
-    //     cardErro.style.display = "block";
-    //     mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
-    //     finalizarAguardar();
-    //   }
-    // }
-
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
       method: "POST",
@@ -148,7 +140,6 @@
         nomeServer: nomeVar,
         emailServer: emailVar,
         senhaServer: senhaVar
-        // idEmpresaVincularServer: idEmpresaVincular
       }),
     })
       .then(function (resposta) {
@@ -177,26 +168,6 @@
 
     return false;
   }
-
-  // Listando empresas cadastradas 
-  // function listar() {
-  //   fetch("/empresas/listar", {
-  //     method: "GET",
-  //   })
-  //     .then(function (resposta) {
-  //       resposta.json().then((empresas) => {
-  //         empresas.forEach((empresa) => {
-  //           listaEmpresasCadastradas.push(empresa);
-// 
-  //           console.log("listaEmpresasCadastradas")
-  //           console.log(listaEmpresasCadastradas[0].codigo_ativacao)
-  //         });
-  //       });
-  //     })
-  //     .catch(function (resposta) {
-  //       console.log(`#ERRO: ${resposta}`);
-  //     });
-  // }
 
   function sumirMensagem() {
     cardErro.style.display = "none";
