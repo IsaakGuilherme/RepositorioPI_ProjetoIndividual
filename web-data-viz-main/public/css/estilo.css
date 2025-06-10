@@ -20,52 +20,90 @@ body {
   display: flex;
   width: 80%;
   margin: auto;
+  align-items: center;
+  box-sizing: border-box;
 }
 
+/* HEADER */
 .header {
   height: var(--tamanho-header);
-  background-color: rgba(0 , 0, 0, 0.1) !important;
-
+  background-color: #fff !important;
+  border-bottom: 2px solid #000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
 }
 
 .header .container {
+  width: 80%;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   height: 100%;
 }
 
-.header a {
-  text-decoration: none;
-  color: #ffffff;
-}
-
-.logo{
-  width: 50px;
-  height: 50px;
-  background-size: cover;
-}
-
-.agora {
-  font-weight: 800;
-}
-
-.navbar {
-  width: 300px;
+.header .logo-santos {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
+}
+
+.header .logo-santos img {
+  height: 54px;
+  width: auto;
+  border-radius: 8px;
+  background: #fff;
+  border: 2px solid #000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 4px;
+  transition: transform 0.2s;
+}
+
+.header .logo-santos img:hover {
+  transform: scale(1.07) rotate(-3deg);
+}
+
+.header .titulo {
+  color: #111;
+  font-family: 'Oswald', 'Cabin', sans-serif;
+  font-weight: 900;
+  font-size: 2.1em;
+  letter-spacing: 2px;
+  margin: 0 20px 0 0;
+}
+
+.header .navbar {
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   list-style: none;
-  color: #ffffff;
-}
-
-.titulo {
-  color: #ffffff;
-  width: fit-content;
-  font-weight: 500;
-}
-
-.header h1 {
+  gap: 24px;
+  color: #111;
   margin: 0;
+  padding: 0;
+}
+
+.header .navbar li {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.header .navbar a {
+  text-decoration: none;
+  color: #111;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.header .navbar a:hover,
+.header .navbar .agora a {
+  background: #e0e0e0;
+  color: #000;
 }
 
 /* BANNER */
@@ -448,7 +486,7 @@ body {
   font-size: 1.8em;
   font-weight: bold;
   padding: 0.8rem 2rem;
-  margin: 30px 0px 0px 20px;
+  margin: 30px 0px 0px 0px;
   transition: transform 0.2s ease;
 }
 
@@ -466,22 +504,80 @@ body {
 }
 
 /* FOOTER */
-
 .footer {
-  background-color: #000000;
-  height: 150px;
-  color: #fff;
+  background-color: #fff;
+  border-top: 2px solid #000;
+  color: #111;
+  height: 90px;
   display: flex;
-  font-size: 15px;
+  align-items: center;
+  font-size: 1em;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+  justify-content: center;
+  position: relative;
+  z-index: 10;
 }
 
 .footer .container {
-  justify-content: center;
-  text-align: center;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.footer .container .version {
-  font-size: 12px;
+.footer .footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+}
+
+.footer .footer-logo img {
+  height: 38px;
+  width: 38px;
+  min-width: 32px;
+  min-height: 32px;
+  max-height: 48px;
+  max-width: 48px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
+  border: 1.5px solid #000;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  padding: 2px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.footer .footer-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 48px;
+  margin-left: 6%;
+
+}
+
+.footer .footer-links a {
+  color: #111;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1em;
+  transition: color 0.2s;
+}
+
+.footer .footer-links a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.footer .footer-copy {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  font-size: 0.95em;
+  color: #444;
+  text-align: right;
 }
 
 /* LOGIN */
@@ -707,4 +803,21 @@ input {
   50%  {transform: rotate(25deg)}
   75%  {transform: rotate(-25deg)}
   100% {transform: rotate(25deg)}
+}
+
+.logo-header {
+  height: 54px;      
+  width: 54px;       
+  min-width: 40px;
+  min-height: 40px;
+  max-height: 70px;
+  max-width: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  border: 2px solid #000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 4px;
+  display: inline-block;
+  margin-left: 17%;
 }
