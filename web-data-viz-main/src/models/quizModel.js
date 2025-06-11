@@ -14,14 +14,12 @@ async function buscarQuestoesComAlternativas() {
   `;
   const resultados = await database.executar(instrucaoSql);
 
-  // Montar o vetor no formato esperado pelo front-end
   const listaDeQuestoes = [];
   let questaoAtual = null;
   let idUltimaPergunta = null;
 
   resultados.forEach(row => {
     if (row.idPerguntaQuiz !== idUltimaPergunta) {
-      // Se mudou a pergunta, cria um novo objeto
       questaoAtual = {
         id: row.idPerguntaQuiz,
         pergunta: row.textoPergunta,
@@ -37,7 +35,7 @@ async function buscarQuestoesComAlternativas() {
       listaDeQuestoes.push(questaoAtual);
       idUltimaPergunta = row.idPerguntaQuiz;
     }
-    // Mapear alternativas conforme ordem
+
     if (row.ordem === 1) {
       questaoAtual.alternativaA = row.textoResposta;
       questaoAtual.idAlternativaA = row.idRespostaQuiz;
@@ -60,6 +58,5 @@ async function buscarQuestoesComAlternativas() {
 }
 
 module.exports = {
-  buscarQuestoesComAlternativas,
-  // ...outras funções...
+  buscarQuestoesComAlternativas
 };
