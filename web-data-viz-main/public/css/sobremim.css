@@ -53,6 +53,7 @@ body {
 .titulo-introducao {
     font-size: 2.2em;
     color: #111;
+    margin-top: 0px;
     margin-bottom: 10px;
     font-family: 'Oswald', sans-serif;
 }
@@ -81,9 +82,23 @@ body {
 }
 
 .introducao-idolos p {
-    font-size: 1.15em;
+    font-size: 1.5em;
     color: #222;
     margin-bottom: 18px;
+}
+
+.introducao-idolos img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 6px;
+    left: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+    margin-bottom: 18px;
+}
+
+.introducao-idolos ul {
+    list-style-type: none;
 }
 
 .galeria-viagens {
@@ -116,7 +131,6 @@ body {
     background: #fff;
     border-radius: 18px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    padding: 36px 32px;
     margin-bottom: 40px;
     flex-direction: column;
     align-items: flex-start;
@@ -130,14 +144,14 @@ body {
 }
 
 .sobre-titulos ul {
-    margin-left: 24px;
     margin-bottom: 12px;
+    padding: 0px !important;
 }
 
 .sobre-titulos li {
     font-size: 1.15em;
     color: #222;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 @media (max-width: 900px) {
