@@ -12,6 +12,7 @@ async function buscarQuestoesComAlternativas() {
     JOIN respostaQuiz rq ON pq.idPerguntaQuiz = rq.fkpergunta
     ORDER BY pq.ordem, rq.ordem;
   `;
+  
   const resultados = await database.executar(instrucaoSql);
 
   const listaDeQuestoes = [];
