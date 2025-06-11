@@ -50,9 +50,14 @@
         </div>
 
         <div class="dash">
-
-            <canvas id="graficoRevelacoes"></canvas>
-
+            <div class="grafico-container">
+                <div class="grafico-titulo">Jogadores Revelações</div>
+                <canvas id="graficoRevelacoes"></canvas>
+            </div>
+            <div class="grafico-container">
+                <div class="grafico-titulo">Jogos Inesquecíveis</div>
+                <canvas id="graficoJogosInesqueciveis"></canvas>
+            </div>
         </div>
     </div>
 
@@ -66,7 +71,10 @@
     let proximaAtualizacao;
     var jogador = [];
     var totalVotos = [];
+    var maiorJogo = [];
+    var jogosVotos = [];
     var graficoRevelacoes;
+    var graficoJogosInesqueciveis;
 
     window.onload = definirUsuario(), buscarDadosRevelacoes();
 
@@ -92,6 +100,34 @@
                         });
 
                         plotarGraficoRevelacoes(jogador, totalVotos);
+                    });
+                } else {
+                    console.error('Nenhum dado encontrado ou erro na API');
+                }
+            })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+    }
+
+    function buscarJogoInesquecivel() {
+        fetch(`/dashboard/buscarJogoInesquecivel`, { cache: 'no-store' })
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(function (resposta) {
+                        console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                        dadosSensor = resposta;
+                        maiorJogo = [];
+                        jogosVotos = [];
+
+                        dadosSensor.forEach(function (dado) {
+                            maiorJogo.push(dado.Jogo);
+                            jogosVotos.push(Number(dado.totalVotos));
+                            console.log(maiorJogo);
+                            console.log(jogosVotos);
+                        });
+
+                        plotarGraficoJogo(maiorJogo, jogosVotos);
                     });
                 } else {
                     console.error('Nenhum dado encontrado ou erro na API');
@@ -137,10 +173,50 @@
         }
     }
 
+    function plotarGraficoJogo(maiorJogo, jogosVotos) {
+
+        console.log(`Jogo: ${JSON.stringify(maiorJogo)}`);
+        console.log(`Total de Votos: ${JSON.stringify(jogosVotos)}`);
+
+        var canvasInesquecivel = document.getElementById('graficoJogosInesqueciveis');
+
+        if (!graficoJogosInesqueciveis) {
+            graficoJogosInesqueciveis = new Chart(canvasInesquecivel, {
+                type: 'bar',
+                data: {
+                    labels: maiorJogo,
+                    datasets: [{
+                        label: 'Jogo inesquecível',
+                        data: jogosVotos,
+                        backgroundColor: ['#1e90ff', '#ff6347', '#32cd32', '#ffa500'],
+                        borderWidth: 1
+                    }]
+                },
+                type: 'bar',
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } else {
+            graficoRevelacoes.data.labels = maiorJogo;
+            graficoRevelacoes.data.datasets[0].data = jogosVotos;
+            graficoRevelacoes.update();
+        }
+    }
+
+
     window.onload = function () {
         definirUsuario();
         buscarDadosRevelacoes();
+        buscarJogoInesquecivel();
 
-        setInterval(buscarDadosRevelacoes, 10000); 
+        setInterval(function () {
+            buscarDadosRevelacoes,
+                buscarJogoInesquecivel
+        }, 10000);
     };
 </script>
