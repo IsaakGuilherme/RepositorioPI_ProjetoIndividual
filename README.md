@@ -1,4 +1,4 @@
-![Orgulho Santista Logo](assets/icon/santos.ico)
+![Orgulho Santista Logo](web-data-viz-main/public/assets/icon/Santos.ico)
 
 # ⚽ Orgulho Santista – Viva a História, Compartilhe a Paixão
 
