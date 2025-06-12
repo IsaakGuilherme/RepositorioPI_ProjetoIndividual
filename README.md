@@ -55,7 +55,7 @@ Todos os dados são coletados anonimamente via quiz e organizados em tempo real 
 
 1. Clone este repositório:
 
-   git clone https://github.com/seu-usuario/orgulho-santista.git
+   git clone https://github.com/IsaakGuilherme/RepositorioPI_ProjetoIndividual
 
 2. No terminal, instale os pacotes necessários da API (caso utilize):
 
@@ -71,13 +71,13 @@ Todos os dados são coletados anonimamente via quiz e organizados em tempo real 
 
    npm start
 
-7. Acesse `http://localhost:3333` e explore a experiência santista!
+7. Acesse `http://localhost:3334` e explore a experiência santista!
 
 ---
 
 ## 👤 Autor
 
-Desenvolvido com carinho e santistismo por **Isaak Guilherme**  
+Desenvolvido por **Isaak Guilherme**  
 - ✉️ Contato via [LinkedIn](https://www.linkedin.com/in/isaak-guilherme-3762b6350/)
 
 ---
