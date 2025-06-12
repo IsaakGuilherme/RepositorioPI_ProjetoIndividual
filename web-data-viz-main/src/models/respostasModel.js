@@ -1,13 +1,17 @@
 var database = require("../database/config");
 
-// salvarRespostas recebe idUsuario e um array de objetos {idPergunta, idResposta}
 async function salvarRespostas(idUsuario, respostas) {
-  const values = respostas.map(r => `(${idUsuario}, ${r.idPergunta}, ${r.idResposta})`).join(',');
+  const values = [];
+  respostas.forEach(r => {
+    values.push(`(${idUsuario}, ${r.idPergunta}, ${r.idResposta})`);
+  });
+  
   const instrucaoSql = `
     INSERT INTO respostaUsuario (fkusuario, fkpergunta, fkresposta)
-    VALUES ${values}
+    VALUES ${values.join(',')}
     ON DUPLICATE KEY UPDATE fkresposta=VALUES(fkresposta);
   `;
+  
   return database.executar(instrucaoSql);
 }
 
