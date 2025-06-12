@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Santos | Cadastro</title>
+  <title>Orgulho Santista | Cadastro</title>
 
   <script src="./js/sessao.js"></script>
 
@@ -16,10 +16,9 @@
 </head>
 
 <body onload="listar()">
-  <!--header inicio-->
   <div class="header">
     <div class="container">
-      <h1 class="titulo">Santos</h1>
+      <h1 class="titulo">Orgulho Santista</h1>
       <img class="logo-header" src="assets/icon/Santos.ico" alt="Emblema do Santos Futebol Clube">
       <ul class="navbar">
         <li>
@@ -38,7 +37,6 @@
       </ul>
     </div>
   </div>
-  <!--header fim-->
 
   <div class="login">
     <div class="alerta_erro">
@@ -50,10 +48,6 @@
       <div class="card card-cadastro">
         <h2>Bem-vindo!</h2>
         <div class="formulario">
-          <!--
-                         Para inserir mais um campo, copie uma das inputs abaixo.
-                         Assim que inserir vá para o script abaixo.
-                     -->
           <div class="campo">
             <span>Nome:</span>
             <input id="nome_input" type="text" placeholder="Seu nome" />
@@ -103,10 +97,6 @@
 
 <script>
   function cadastrar() {
-    // aguardar();
-
-    //Recupere o valor da nova input pelo nome do id
-    // Agora vá para o método fetch logo abaixo
     var nomeVar = nome_input.value;
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
