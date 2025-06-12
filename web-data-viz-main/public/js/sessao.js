@@ -1,6 +1,16 @@
 function validarSessao() {
     var email = sessionStorage.EMAIL_USUARIO;
     var nome = sessionStorage.NOME_USUARIO;
+    var id = sessionStorage.ID_USUARIO;
+
+    if (email != null && nome != null && id == 1) {
+        var div_administrativo = document.getElementById("div_administrativo");
+        div_administrativo.style.display = "flex";
+        div_administrativo.style.justifyContent = "center";
+    } else {
+        var div_administrativo = document.getElementById("div_administrativo");
+        div_administrativo.style.display = "none";
+    }
 
     var b_usuario = document.getElementById("b_usuario");
 
