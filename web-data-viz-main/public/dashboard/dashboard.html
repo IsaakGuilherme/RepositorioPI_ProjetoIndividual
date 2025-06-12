@@ -36,9 +36,9 @@
 
             </div>
 
-            <div class="btn-nav-white">
-                <a href="./mural.html">
-                    <h3>Forum</h3>
+            <div id="div_administrativo">
+                <a href="./administrativo.html">
+                    <h3>Administrativo</h3>
                 </a>
             </div>
 
@@ -49,13 +49,25 @@
         </div>
 
         <div class="dash">
-            <div class="grafico-container">
-                <div class="grafico-titulo">Jogadores Revelações</div>
-                <canvas id="graficoRevelacoes"></canvas>
+            <div class="kpi-container">
+                <div class="kpi-box">
+                    <span class="kpi-label">Jogador Revelação Mais Votado</span>
+                    <span class="kpi-value" id="kpi-jogador">-</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">Jogo Inesquecível Mais Votado</span>
+                    <span class="kpi-value" id="kpi-jogo">-</span>
+                </div>
             </div>
-            <div class="grafico-container">
-                <div class="grafico-titulo">Jogos Inesquecíveis</div>
-                <canvas id="graficoJogosInesqueciveis"></canvas>
+            <div class="graficos-row">
+                <div class="grafico-container">
+                    <div class="grafico-titulo">Jogadores Revelações</div>
+                    <canvas id="graficoRevelacoes"></canvas>
+                </div>
+                <div class="grafico-container">
+                    <div class="grafico-titulo">Jogos Inesquecíveis</div>
+                    <canvas id="graficoJogosInesqueciveis"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -170,6 +182,13 @@
             graficoRevelacoes.data.datasets[0].data = totalVotos;
             graficoRevelacoes.update();
         }
+
+        if (jogador.length > 0 && totalVotos.length > 0) {
+            let maxIndex = totalVotos.indexOf(Math.max(...totalVotos));
+            document.getElementById('kpi-jogador').innerText = jogador[maxIndex];
+        } else {
+            document.getElementById('kpi-jogador').innerText = "-";
+        }
     }
 
     function plotarGraficoJogo(maiorJogo, jogosVotos) {
@@ -205,10 +224,18 @@
             graficoRevelacoes.data.datasets[0].data = jogosVotos;
             graficoRevelacoes.update();
         }
+
+        if (maiorJogo.length > 0 && jogosVotos.length > 0) {
+            let maxIndex = jogosVotos.indexOf(Math.max(...jogosVotos));
+            document.getElementById('kpi-jogo').innerText = maiorJogo[maxIndex];
+        } else {
+            document.getElementById('kpi-jogo').innerText = "-";
+        }
     }
 
 
     window.onload = function () {
+        validarSessao();
         definirUsuario();
         buscarDadosRevelacoes();
         buscarJogoInesquecivel();

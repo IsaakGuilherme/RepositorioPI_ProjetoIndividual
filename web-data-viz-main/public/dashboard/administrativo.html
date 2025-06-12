@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orgulho Santista | Administrativo</title>
+
+    <link rel="stylesheet" href="./../css/dashboards.css">
+    <link rel="stylesheet" href="./../css/estilo.css" />
+    <script src="../js/sessao.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+    <div class="janela">
+        <div class="header-left">
+
+            <h1>Orgulho Santista</h1>
+
+            <div class="hello">
+                <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="cards.html">
+                    <h3>Quiz</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./dashboard.html">
+                    <h3>DashBoard - Comunidade</h3>
+                </a>
+            </div>
+
+            <div id="div_administrativo">
+                <a href="./administrativo.html">
+                    <h3>Administrativo</h3>
+                </a>
+            </div>
+
+            <div class="btn-logout" onclick="limparSessao()">
+                <h3>Sair</h3>
+            </div>
+        </div>
+        <div class="admin-main">
+            <div class="admin-kpi-container">
+                <div class="admin-kpi-box">
+                    <span class="admin-kpi-label">Dia com mais cadastros na Última Semana</span>
+                    <span class="admin-kpi-value" id="kpi-cadastros">-</span>
+                </div>
+            </div>
+            <div class="admin-grafico-container">
+                <div class="admin-grafico-titulo">Cadastros por Dia (Últimos 7 dias)</div>
+                <canvas id="graficoCadastros"></canvas>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+
+    var graficosCadastros;
+    var diaCadastros = [];
+    var cadastros = [];
+
+    function buscarUsuariosCadastrados() {
+        fetch(`/administrativo/buscarUsuariosCadastrados`, { cache: 'no-store' })
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(function (resposta) {
+                        console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                        dadosSensor = resposta;
+                        diaCadastros = [];
+                        cadastros = [];
+
+                        dadosSensor.forEach(function (dados) {
+                            let data = dados.dia;
+                            let valor1 = data.split('T')[0];
+                            let [ano, mes, dia] = valor1.split('-');
+                            let valor2 = data.split('T')[1];
+                            let valor3 = valor2.split('.')[0];
+                            let [hora, minuto, segundo] = valor3.split(':');
+
+                            hora = parseInt(hora);
+                            dia = parseInt(dia);
+
+                            if (hora < 3) {
+                                hora += 24
+                                dia -= 1
+                            }
+
+                            diaCadastros.push(`${dia}/${mes}`)
+                            console.log(diaCadastros);
+                        });
+
+
+                        dadosSensor.forEach(function (dado) {
+                            cadastros.push(Number(dado.total));
+                            console.log(cadastros);
+                        });
+
+                        plotarGraficoUsuariosCadastrados(diaCadastros, cadastros);
+                        atualizarKPIcadastros(diaCadastros, cadastros);
+                    });
+                } else {
+                    console.error('Nenhum dado encontrado ou erro na API');
+                }
+            })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+    }
+
+    function plotarGraficoUsuariosCadastrados(diaCadastros, cadastros) {
+
+        console.log(`Dias: ${JSON.stringify(diaCadastros)}`);
+        console.log(`Total de Cadastros: ${JSON.stringify(cadastros)}`);
+
+        var canvasCadastros = document.getElementById('graficoCadastros');
+
+        if (!graficosCadastros) {
+            graficosCadastros = new Chart(canvasCadastros, {
+                type: 'line',
+                data: {
+                    labels: diaCadastros,
+                    datasets: [{
+                        label: 'Cadastros',
+                        data: cadastros,
+                        backgroundColor: ['#1e90ff', '#ff6347', '#32cd32', '#ffa500'],
+                        borderWidth: 1
+                    }]
+                },
+                type: 'bar',
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } else {
+            graficosCadastros.data.labels = diaCadastros;
+            graficosCadastros.data.datasets[0].data = cadastros;
+            graficosCadastros.update();
+        }
+
+        if (diaCadastros.length > 0 && cadastros.length > 0) {
+            let maxIndex = cadastros.indexOf(Math.max(...cadastros));
+            document.getElementById('kpi-cadastros').innerText =
+                `${diaCadastros[maxIndex]}`;
+        } else {
+            document.getElementById('kpi-cadastros').innerText = "-";
+        }
+    }
+
+    function atualizarKPIcadastros(dias, valores) {
+        let maiorCadastro = 0;
+        let indiceMaior = 0;
+
+        for (let i = 0; i < valores.length; i++) {
+            if (valores[i] > maiorCadastro) {
+                maiorCadastro = valores[i];
+                indiceMaior = i;
+            }
+        }
+
+        const diaComMaisCadastro = dias[indiceMaior];
+        if (maiorCadastro > 0) {
+            document.getElementById("kpi-cadastros").innerText = `${diaComMaisCadastro}`;
+        } else {
+            document.getElementById("kpi-cadastros").innerText = "-";
+        }
+    }
+
+    window.onload = function () {
+        validarSessao();
+        buscarUsuariosCadastrados();
+
+        setInterval(function () {
+            buscarUsuariosCadastrados();
+        }, 10000);
+    };
+
+</script>
