@@ -324,9 +324,6 @@ body {
 #radio3:checked ~ .primeiro {
   margin-left: -50%;
 }
-#radio4:checked ~ .primeiro {
-  margin-left: -75%;
-}
 
 /*Estadio*/
 
@@ -797,14 +794,6 @@ input {
   animation-iteration-count: infinite;
 }
 
-@keyframes bell {
-  0%   {transform: rotate(25deg)}
-  25%  {transform: rotate(-25deg)}
-  50%  {transform: rotate(25deg)}
-  75%  {transform: rotate(-25deg)}
-  100% {transform: rotate(25deg)}
-}
-
 .logo-header {
   height: 54px;      
   width: 54px;       
@@ -819,5 +808,5 @@ input {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   padding: 4px;
   display: inline-block;
-  margin-left: 17%;
+  margin-left: 5%;
 }
